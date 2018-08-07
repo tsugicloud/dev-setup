@@ -43,7 +43,7 @@ for i in $DEV_SERVER_LIST; do
   echo ===== Processing $host
   echo Host $host $admin $dbpw
   url=$save_apphome/d/$host
-  echo "<li><p><a href=\"$url\" target=\"_blank\">$url</p></li>" >> /var/www/html/index.php
+  echo "<li><p><a href=\"$url\" target=\"_blank\">$url</a></p></li>" >> /var/www/html/index.php
 
 mysql -u root --password=$MYSQL_ROOT_PASSWORD << EOF
 DROP DATABASE $host
