@@ -1,7 +1,5 @@
 #! /bin/bash
 
-servers="d1,sakaiger d2,sakaiger"
-
 source /home/ubuntu/tsugi_env.sh
 
 if [ -z "$MYSQL_ROOT_PASSWORD" ] ; then
