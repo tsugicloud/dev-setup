@@ -40,6 +40,11 @@ git clone https://github.com/tsugicloud/dev-jekyll-site.git /var/www/html/d/$hos
 echo Creating tsugi for $host
 git clone https://github.com/tsugiproject/tsugi /var/www/html/d/$host/tsugi
 
+echo Adding a few tools for $host
+cd /var/www/html/d/$host/tsugi/mod
+git clone https://github.com/tsugitools/youtube.git
+git clone https://github.com/tsugitools/map.git
+
 echo Configuring tsugi for $host
 export TSUGI_USER=$host
 export TSUGI_PASSWORD=$dbpw
