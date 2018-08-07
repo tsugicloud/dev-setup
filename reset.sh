@@ -29,7 +29,8 @@ cat << EOF > /var/www/html/index.php
 </head>
 <body>
 <h1>Welcome to the Tsugi Developer Sites</h1>
-<p>You can use an of the server(s) in the list below.</p>
+<p>You can use an of the server(s) in the list below.
+</p>
 <ul>
 EOF
 
@@ -99,6 +100,10 @@ done
 # Finiah the main page
 cat << EOF >> /var/www/html/index.php
 </ul>
+<p>
+These servers are completely emptied out and rebuilt
+every few days so don't count on them.
+</p>
 </body>
 </html>
 EOF
