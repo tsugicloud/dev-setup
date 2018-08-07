@@ -29,6 +29,7 @@ cat << EOF > /var/www/html/index.php
 </head>
 <body>
 <h1>Welcome to the Tsugi Developer Sites</h1>
+<p>You can use an of the server(s) in the list below.</p>
 <ul>
 EOF
 
