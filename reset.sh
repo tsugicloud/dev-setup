@@ -97,12 +97,16 @@ fi
 
 done
 
-# Finiah the main page
+# Finish the main page
+last_reset=`date`
 cat << EOF >> /var/www/html/index.php
 </ul>
 <p>
 These servers are completely emptied out and rebuilt
 every few days so don't count on them.
+</p>
+<p>
+Most recent reset: $last_reset
 </p>
 </body>
 </html>
