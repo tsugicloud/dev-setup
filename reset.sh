@@ -12,14 +12,23 @@ if [ -z "$DEV_SERVER_LIST" ] ; then
    exit
 fi
 
-echo "Emptying /var/www/html/d"
-rm -rf /var/www/html/d
-mkdir /var/www/html/d
+echo "Emptying /var/www/html"
+rm -rf /var/www/html
+mkdir /var/www/html
 
 echo Downloading phpMyAdmin
 cd /home/ubuntu
 curl -O https://files.phpmyadmin.net/phpMyAdmin/4.7.9/phpMyAdmin-4.7.9-all-languages.zip
 
+# Start the main page
+cat << EOF > /var/www/html/index.php
+<html>
+<head>
+</head>
+<body>
+<h1>Welcome to the Tsugi Developer Sites</h1>
+<ul>
+EOF
 
 for i in $DEV_SERVER_LIST; do
   host=`echo $i | awk -F',' '{print $1}'`
@@ -29,6 +38,8 @@ for i in $DEV_SERVER_LIST; do
   echo
   echo ===== Processing $host
   echo Host $host $admin $dbpw
+  url=$TSUGI_WWWROOT/d/$host
+  echo "<li><p><a href=\"$url\" target=\"_blank\">$url</p></li>" >> /var/www/html/index.php
 
 mysql -u root --password=$MYSQL_ROOT_PASSWORD << EOF
 DROP DATABASE $host
@@ -81,6 +92,13 @@ else
 fi
 
 done
+
+# Finiah the main page
+cat << EOF >> /var/www/html/index.php
+</ul>
+</body>
+</html>
+EOF
 
 echo "Resetting permissions on /var/www/html"
 chown -R www-data:www-data /var/www/html
