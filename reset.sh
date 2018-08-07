@@ -16,7 +16,7 @@ save_apphome=$TSUGI_APPHOME
 
 echo "Emptying /var/www/html"
 rm -rf /var/www/html
-mkdir /var/www/html
+git clone https://github.com/tsugicloud/dev-jekyll-site.git /var/www/html
 
 echo Downloading phpMyAdmin
 cd /home/ubuntu
