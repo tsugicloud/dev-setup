@@ -62,7 +62,7 @@ echo Creating tsugi for $host
 git clone https://github.com/tsugiproject/tsugi /var/www/html/d/$host/tsugi
 
 echo Adding a few tools for $host
-cd /var/www/html/d/$host/tsugi/mod
+cd /var/www/html/d/$host/mod
 git clone https://github.com/tsugitools/youtube.git
 git clone https://github.com/tsugitools/map.git
 
