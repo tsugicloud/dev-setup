@@ -20,6 +20,7 @@ for i in $DEV_SERVER_LIST; do
   host=`echo $i | awk -F',' '{print $1}'`
   admin=`echo $i | awk -F',' '{print $2}'`
   dbpw=pw_$(($RANDOM+$RANDOM*$RANDOM))
+  dbpw=db_$admin
   echo
   echo ===== Processing $host
   echo Host $host $admin $dbpw
