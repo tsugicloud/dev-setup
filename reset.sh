@@ -12,6 +12,8 @@ if [ -z "$DEV_SERVER_LIST" ] ; then
    exit
 fi
 
+save_apphome=$TSUGI_APPHOME
+
 echo "Emptying /var/www/html"
 rm -rf /var/www/html
 mkdir /var/www/html
@@ -38,7 +40,7 @@ for i in $DEV_SERVER_LIST; do
   echo
   echo ===== Processing $host
   echo Host $host $admin $dbpw
-  url=$TSUGI_WWWROOT/d/$host
+  url=$save_apphome/d/$host
   echo "<li><p><a href=\"$url\" target=\"_blank\">$url</p></li>" >> /var/www/html/index.php
 
 mysql -u root --password=$MYSQL_ROOT_PASSWORD << EOF
