@@ -14,8 +14,8 @@ fi
 
 save_apphome=$TSUGI_APPHOME
 
-echo "Emptying /var/www/html/d"
-rm -rf /var/www/html/d
+echo "Emptying /var/www/html/dev"
+rm -rf /var/www/html/dev
 rm /var/www/html/index.html
 
 echo Downloading phpMyAdmin
@@ -45,6 +45,57 @@ for i in $DEV_SERVER_LIST; do
   url=$save_apphome/d/$host
   echo "<li><p><a href=\"$url\" target=\"_blank\">$url</a></p></li>" >> /var/www/html/index.php
 
+echo "Setting up virtual hosting"
+rm /etc/apache2/sites-available/$host.$TSUGI_MAILDOMAIN
+rm /etc/apache2/sites-enabled/$host.$TSUGI_MAILDOMAIN
+
+cat << EOF > /etc/apache2/sites-available/$host.$TSUGI_MAILDOMAIN.conf
+<VirtualHost *:80>
+    # The ServerName directive sets the request scheme, hostname and port that
+    # the server uses to identify itself. This is used when creating
+    # redirection URLs. In the context of virtual hosts, the ServerName
+    # specifies what hostname must appear in the request's Host: header to
+    # match this virtual host. For the default virtual host (this file) this
+    # value is not decisive as it is used as a last resort host regardless.
+    # However, you must set it for any further virtual host explicitly.
+    #ServerName www.example.com
+
+        ServerName $host.$TSUGI_MAILDOMAIN
+    ServerAdmin $TSUGI_OWNEREMAIL
+    DocumentRoot /var/www/html/dev/$host
+
+    # Available loglevels: trace8, ..., trace1, debug, info, notice, warn,
+    # error, crit, alert, emerg.
+    # It is also possible to configure the loglevel for particular
+    # modules, e.g.
+    #LogLevel info ssl:warn
+
+    ErrorLog \${APACHE_LOG_DIR}/error.log
+    CustomLog \${APACHE_LOG_DIR}/access.log combined
+
+    # For most configuration files from conf-available/, which are
+    # enabled or disabled at a global level, it is possible to
+    # include a line for only one particular virtual host. For example the
+    # following line enables the CGI configuration for this host only
+    # after it has been globally disabled with "a2disconf".
+    #Include conf-available/serve-cgi-bin.conf
+</VirtualHost>
+
+<Directory /var/www/html/dev/$host>
+                Options Indexes FollowSymLinks
+                AllowOverride All
+                Order allow,deny
+                allow from all
+</Directory>
+
+# vim: syntax=apache ts=4 sw=4 sts=4 sr noet
+EOF
+
+cd /etc/apache2/sites-enabled
+rm $host.$TSUGI_MAILDOMAIN
+ln -s ../sites-available/$host.$TSUGI_MAILDOMAIN.conf
+
+
 mysql -u root --password=$MYSQL_ROOT_PASSWORD << EOF
 DROP DATABASE $host
 EOF
@@ -56,13 +107,14 @@ mysql -u root --password=$MYSQL_ROOT_PASSWORD << EOF
 EOF
 
 echo Creating web for $host
-git clone https://github.com/tsugicloud/dev-jekyll-site.git /var/www/html/d/$host
+git clone https://github.com/tsugicloud/dev-jekyll-site.git /var/www/html/dev/$host
 
 echo Creating tsugi for $host
-git clone https://github.com/tsugiproject/tsugi /var/www/html/d/$host/tsugi
+git clone https://github.com/tsugiproject/tsugi /var/www/html/dev/$host/tsugi
 
 echo Adding a few tools for $host
-cd /var/www/html/d/$host/mod
+cd /var/www/html/dev/$host/mod
+pwd
 git clone https://github.com/tsugitools/youtube.git
 git clone https://github.com/tsugitools/map.git
 
@@ -75,10 +127,10 @@ export TSUGI_MAILDOMAIN=tsugicloud.org
 export TSUGI_APPHOME=https://dev.tsugicloud.org/d/$host
 export TSUGI_WWWROOT=https://dev.tsugicloud.org/d/$host/tsugi
 
-php /home/ubuntu/ami-sql/fixconfig.php < /home/ubuntu/ami-sql/config.php > /var/www/html/d/$host/tsugi/config.php
+php /home/ubuntu/ami-sql/fixconfig.php < /home/ubuntu/ami-sql/config.php > /var/www/html/dev/$host/tsugi/config.php
 
 echo Setting up database for $host
-cd /var/www/html/d/$host/tsugi/admin
+cd /var/www/html/dev/$host/tsugi/admin
 php upgrade.php
 
 echo Setting up phpMyAdmin for $host
@@ -90,7 +142,7 @@ then
   echo "Sha Match"
   rm -rf phpMyAdmin-4.7.9-all-languages
   unzip phpMyAdmin-4.7.9-all-languages.zip
-  mv phpMyAdmin-4.7.9-all-languages /var/www/html/d/$host/phpMyAdmin
+  mv phpMyAdmin-4.7.9-all-languages /var/www/html/dev/$host/phpMyAdmin
 else
   echo "SHA256 mismatch"
 fi
