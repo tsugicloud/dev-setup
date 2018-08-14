@@ -17,6 +17,7 @@ save_apphome=$TSUGI_APPHOME
 echo "Emptying /var/www/html/dev"
 rm -rf /var/www/html/dev
 rm /var/www/html/index.html
+rm /var/www/html/.htaccess
 
 echo Downloading phpMyAdmin
 cd /home/ubuntu
@@ -42,7 +43,7 @@ for i in $DEV_SERVER_LIST; do
   echo
   echo ===== Processing $host
   echo Host $host $admin $dbpw
-  url=$save_apphome/d/$host
+  url=https://$host.$TSUGI_MAILDOMAIN
   echo "<li><p><a href=\"$url\" target=\"_blank\">$url</a></p></li>" >> /var/www/html/index.php
 
 echo "Setting up virtual hosting"
@@ -167,3 +168,4 @@ EOF
 echo "Resetting permissions on /var/www/html"
 chown -R www-data:www-data /var/www/html
 
+apachectl restart
