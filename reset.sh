@@ -124,9 +124,8 @@ export TSUGI_USER=$host
 export TSUGI_PASSWORD=$dbpw
 export TSUGI_PDO="mysql:host=localhost;dbname=$host"
 export TSUGI_ADMINPW=$admin
-export TSUGI_MAILDOMAIN=tsugicloud.org
-export TSUGI_APPHOME=https://dev.tsugicloud.org/d/$host
-export TSUGI_WWWROOT=https://dev.tsugicloud.org/d/$host/tsugi
+export TSUGI_APPHOME=https://$host.$TSUGI_MAILDOMAIN
+export TSUGI_WWWROOT=https://$host.$TSUGI_MAILDOMAIN/tsugi
 
 php /home/ubuntu/ami-sql/fixconfig.php < /home/ubuntu/ami-sql/config.php > /var/www/html/dev/$host/tsugi/config.php
 
