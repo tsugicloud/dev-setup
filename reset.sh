@@ -118,6 +118,7 @@ cd /var/www/html/dev/$host/mod
 pwd
 git clone https://github.com/tsugitools/youtube.git
 git clone https://github.com/tsugitools/map.git
+git clone https://github.com/tsugicontrib/lmstest.git
 
 echo Configuring tsugi for $host
 export TSUGI_USER=$host
